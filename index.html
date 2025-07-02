@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+      <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Interactive Coffee Menu</title>
+            <link rel="stylesheet" href="styles.css">
+            <link rel="icon" type="image/x-icon" href="coffee.png">
+
+      </head>
+
+      <body>
+            <div class="floating-beans" id="floatingBeans"></div>
+            <div class = "container">
+                  <div class = "header">
+                        <h1>Make your own coffee!!!</h1>
+                        <p>Welcome home, Barista! </p>
+                  </div>
+
+                  <div class = "coffee-builder">
+
+                        <div class="step-title" id="stepTitle">1. Choose base.</div>
+
+                        <div class="current-coffee">
+                              <div class="coffee-visual" id="coffeeVisual">🫗</div>
+                              
+                              <div class="ingredients-list" id="ingredientsList">
+                                  <!-- dynamic ingredients will appear here -->
+                              </div>
+                              
+                              <div class="coffee-name" id="coffeeName"> Empty. </div>
+                              
+                              <div class="suggestions" id="suggestions" style="display: none;">
+                                  <!-- suggestions will appear here -->
+                              </div>
+                              
+                              <div class="price-display" id="priceDisplay">0</div>
+                        </div>
+
+                        <div class="options-grid" id="optionsGrid">
+                              <!-- Dynamic options will appear here -->
+                        </div>
+            
+                        <div class="action-buttons">
+                              <button class="btn btn-secondary" onclick="resetCoffee()" id="resetBtn" style="display: none;">
+                                    🔄 Start over.
+                              </button>
+                              <button class="btn btn-primary" onclick="finishCoffee()" id="finishBtn" style="display: none;">
+                                    ✨ Complete!
+                              </button>
+                        </div>
+                  </div>
+            </div>
+      </body>
+      <script src="myscripts.js"></script>
+</html>
