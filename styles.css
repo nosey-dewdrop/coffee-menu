@@ -1,7 +1,6 @@
 
 
 /* 
-
 body
 
 floating-beans
@@ -24,6 +23,22 @@ container
 
 */
 
+
+/*
+
+ingredient-chip
+ingredient-chip:hover
+
+.ingredient-chip .remove-btn 
+.ingredient-chip .remove-btn:hover
+
+.suggestions h4
+
+suggestion-item
+suggestion-item:hover
+
+
+*/
 
 * {
       margin: 0;
@@ -147,6 +162,8 @@ body {
       margin: 15px 0;
       text-align: center;
 }
+
+/*suggestions h4 comes here.*/
 
 /*divider 2 - display. */
 .price-display {

@@ -1,18 +1,22 @@
-const basit = {
-  'anahtar': 'değer'
+
+## key-value mapping system in javascript
+'espresso_single,steamed_milk,milk_foam': { name: 'Latte', visual: '🥛' }
+i can design it however i really want to, they all don't have to have two attributes.
+
+const sozluk = {
+      'anahtar': "değer", 
+      'baska_anahtar': 'başka_değer'
 }
 
-const icIce = {
-  'anahtar': {          // ← Dış key
-    'ic_anahtar': 'değer'   // ← İç key
-  }
+console.log(sozluk["anahtar"]);
+
+const kahveRehberi = {
+  'latte': ['espresso', 'süt', 'köpük'],
+  'americano': ['espresso', 'sıcak_su'],
+  'mocha': ['espresso', 'süt', 'çikolata', 'köpük']
 }
 
-const coffeeRecognition = {
-  // DIŞ KEY: malzeme listesi
-  'espresso_single,steamed_milk': {
-    // İÇ KEY-VALUE'LAR:
-    name: 'Flat White',  // name = iç key, 'Flat White' = iç value
-    visual: '🥛'         // visual = iç key, '🥛' = iç value
-  }
-}
+"key1": "string value",     // string
+"key2": 15,                 // number  
+"key3": { },                // obje
+"key4": [ ]                 // array

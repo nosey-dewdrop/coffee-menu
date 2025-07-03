@@ -1,19 +1,3 @@
-
-/**
- * Interactive Coffee Builder - Clean Version
- * HTML Elements:
- * - floatingBeans (container)
- * - stepTitle (displays current step)
-      * - coffeeVisual (emoji display)
-      * - ingredientsList (selected ingredients)
-      * - coffeeName (recognized coffee name)
-      * - suggestions (recommendations)
-      * - priceDisplay (total price)
- * - optionsGrid (available choices)
-      * - resetBtn (restart button)
-      * - finishBtn (complete order button)
- */
-
 let currentIngredients = [];
 let currentStep = "base";
 let totalPrice = 0;
@@ -196,6 +180,55 @@ const coffeeData = {
     }
 };
 
+const coffeeSuggestions = {
+
+      "espresso_single,steamed_milk": [
+        { suggestion: "Add milk foam to make a Latte", ingredients: ["milk_foam"] },
+        { suggestion: "Add thick foam to make a Cappuccino", ingredients: ["thick_foam"] },
+        { suggestion: "Add chocolate to make a Mocha", ingredients: ["chocolate"] }
+      ],
+      "espresso_single,chocolate": [
+        { suggestion: "Add steamed milk to make a complete Mocha", ingredients: ["steamed_milk"] },
+        { suggestion: "Add hot milk for hot chocolate flavor", ingredients: ["hot_milk"] }
+      ],
+      "espresso_single": [
+        { suggestion: "Add hot water to make an Americano", ingredients: ["hot_water"] },
+        { suggestion: "Add steamed milk to make a Latte", ingredients: ["steamed_milk"] },
+        { suggestion: "Add milk foam to make a Macchiato", ingredients: ["milk_foam"] }
+      ]
+};
+
+function initializeCoffeeBuilder() {
+      showOptions("base");
+      createFloatingBeans();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+      initializeCoffeeBuilder();
+});
+
+function selectOption(option) {     
+      currentIngredients.push(option.id);
+
+      if (currentStep == "base"){
+            showOptions("addition");
+      }
+      else if(currentStep == "addition"){
+            if (option.makes){
+
+                  finalizeCoffee();
+            }
+            else if (option.id === 'steamed_milk' || option.id === 'hot_milk') {
+                  showOptions('foam');
+            }
+            else {
+                  finalizeCoffee();
+            }
+      }
+      else if(currentStep == "foam"){
+            finalizeCoffee();
+      }
+}
 
 /**
  * creates continuous floating coffee beans animation in background
@@ -227,5 +260,61 @@ function createFloatingBeans() {
             // remove bean after animation completes
             setTimeout(function() { bean.remove(); }, 8000);
       }, 1200);
+
 }
 
+/**
+
+initializeCoffeeBuilder()
+      calls => showOptions(step)
+
+showOptions(step)    
+      updates stepTitle
+      updates optionsGrid 
+
+updateCoffeeDisplay()
+      updates ingredientList
+      update coffeeVisual
+      displays coffeeName
+      * real time display *
+
+
+showSuggestions() 
+      shows suggestions.
+      update suggestions div
+      lists suggestions. click function to suggestions.
+      
+
+selectOption(option)
+      add the option.id (what ve added) to currentIngredients
+
+removeIngredient(index)
+
+applySuggestion(ingredientId)
+
+finalizeCoffee()
+
+findOptionById(id)
+
+resetCoffee()
+
+finishCoffee()
+
+createCelebration()
+ */
+
+
+/**
+ * Interactive Coffee Builder - Clean Version
+ * HTML Elements:
+ * - floatingBeans (container)
+ * - stepTitle (displays current step)
+      * - coffeeVisual (emoji display)
+      * - ingredientsList (selected ingredients)
+      * - coffeeName (recognized coffee name)
+      * - suggestions (recommendations)
+      * - priceDisplay (total price)
+ * - optionsGrid (available choices)
+      * - resetBtn (restart button)
+      * - finishBtn (complete order button)
+ */
