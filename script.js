@@ -203,19 +203,42 @@ function initializeCoffeeBuilder() {
       createFloatingBeans();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-      initializeCoffeeBuilder();
-});
+function showOptions(step) {
+    currentStep = step;
+    const stepData = coffeeData[step];
+
+    document.getElementById('stepTitle').textContent = stepData.title;
+
+    const optionsGrid = document.getElementById('optionsGrid');
+    optionsGrid.innerHTML = '';
+
+    for (let i = 0; i < stepData.options.length; i++) {
+        const option = stepData.options[i];
+        
+        const optionCard = document.createElement('div');
+        optionCard.className = 'option-card';
+        optionCard.innerHTML = 
+            '<span class="option-icon">' + option.icon + '</span>' +
+            '<div class="option-title">' + option.title + '</div>' +
+            '<div class="option-desc">' + option.desc + '</div>' ;
+        
+        optionCard.addEventListener('click', function() {
+            selectOption(option);
+        });
+        
+        optionsGrid.appendChild(optionCard);
+    }
+}
 
 function selectOption(option) {     
       currentIngredients.push(option.id);
+      updateCoffeeDisplay();
 
       if (currentStep == "base"){
             showOptions("addition");
       }
       else if(currentStep == "addition"){
             if (option.makes){
-
                   finalizeCoffee();
             }
             else if (option.id === 'steamed_milk' || option.id === 'hot_milk') {
@@ -230,6 +253,133 @@ function selectOption(option) {
       }
 }
 
+function findOptionById(id) {
+    for (const step in coffeeData) {
+        for (let i = 0; i < coffeeData[step].options.length; i++) {
+            if (coffeeData[step].options[i].id === id) {
+                return coffeeData[step].options[i];
+            }
+        }
+    }
+    return null;
+}
+
+function updateCoffeeDisplay() {
+    const ingredientsList = document.getElementById('ingredientsList');
+    const coffeeVisual = document.getElementById('coffeeVisual');
+    const coffeeName = document.getElementById('coffeeName');
+    
+    ingredientsList.innerHTML = '';
+    for (let i = 0; i < currentIngredients.length; i++) {
+        const option = findOptionById(currentIngredients[i]);
+        if (option) {
+            const chip = document.createElement('div');
+            chip.className = 'ingredient-chip';
+            chip.innerHTML = option.icon + ' ' + option.title + 
+                           '<button class="remove-btn" onclick="removeIngredient(' + i + ')">×</button>';
+            ingredientsList.appendChild(chip);
+        }
+    }
+    
+    const coffeeKey = currentIngredients.join(',');
+    const recognizedCoffee = coffeeRecognition[coffeeKey];
+    if (recognizedCoffee) {
+        coffeeName.textContent = recognizedCoffee.name;
+        coffeeVisual.textContent = recognizedCoffee.visual;
+    }
+    
+    showSuggestions();
+}
+
+function showSuggestions() {
+    const suggestionsDiv = document.getElementById('suggestions');
+    // html'deki suggestions id'li ürünleri getiriyor ama. öyle id bir ürün yok? ekliyor muyum? 
+    const coffeeKey = currentIngredients.join(',');
+    const suggestions = coffeeSuggestions[coffeeKey];
+    
+    if (suggestions && currentIngredients.length > 0 && currentIngredients.length < 3) {
+        suggestionsDiv.style.display = 'block';
+        suggestionsDiv.innerHTML = `
+            <h4>☕️ Suggestions:</h4>
+            ${suggestions.map(s => 
+                `<div class="suggestion-item" onclick="applySuggestion('${s.ingredients[0]}')">${s.suggestion}</div>`
+            ).join('')}
+        `;
+    } else {
+        suggestionsDiv.style.display = 'none';
+    }
+}
+
+function removeIngredient(index) {
+    currentIngredients.splice(index, 1);
+    updateCoffeeDisplay();
+
+    if (currentIngredients.length === 0) {
+        document.getElementById('coffeeVisual').textContent = '🫗';
+        document.getElementById('coffeeName').textContent = 'Empty.';
+        showOptions('base');
+    } 
+
+    else {
+        if (currentIngredients.length === 1) {
+            showOptions('addition');
+        } 
+        else if (currentIngredients.length === 2) {
+            const secondIngredient = currentIngredients[1];
+            if (secondIngredient === 'steamed_milk' || secondIngredient === 'hot_milk') {
+                showOptions('foam');
+            } 
+            else {
+                showOptions('addition');
+            }
+        }
+    }
+}
+
+function applySuggestion(ingredientId) {
+    // find the suggested ingredient
+    const optionData = findOptionById(ingredientId);
+    if (optionData) {
+        // add it like a normal selection
+        selectOption(optionData);
+}
+}
+
+function finalizeCoffee() {
+    // change title to completion message
+    document.getElementById('stepTitle').textContent = "🎉 Your coffee is ready!";
+
+    // hide all option cards
+    document.getElementById('optionsGrid').innerHTML = '';
+
+    // show action buttons
+    document.getElementById('resetBtn').style.display = 'inline-block';
+    document.getElementById('finishBtn').style.display = 'inline-block';
+
+    // final coffee recognition
+    const coffeeKey = currentIngredients.join(',');
+    const recognizedCoffee = coffeeRecognition[coffeeKey];
+
+    if (recognizedCoffee) {
+        document.getElementById('coffeeName').textContent = recognizedCoffee.name;
+        document.getElementById('coffeeVisual').textContent = recognizedCoffee.visual;
+    }
+}
+
+function resetCoffee() {
+    currentIngredients = [];
+    currentStep = 'base';
+    totalPrice = 0;
+    
+    document.getElementById('ingredientsList').innerHTML = '';
+    document.getElementById('coffeeVisual').textContent = '🫗';
+    document.getElementById('coffeeName').textContent = 'Empty.';
+    document.getElementById('suggestions').style.display = 'none';
+    document.getElementById('resetBtn').style.display = 'none';
+    document.getElementById('finishBtn').style.display = 'none';
+    
+    showOptions('base');
+}
 /**
  * creates continuous floating coffee beans animation in background
  * generates beans with random positions and fall speeds
@@ -263,58 +413,40 @@ function createFloatingBeans() {
 
 }
 
-/**
+function createCelebration() {
+    const colors = ['#d4a574', '#f4c430', '#ff6b6b', '#4ecdc4', '#45b7d1'];
+    
+    for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = '-10px';
+            confetti.style.width = '8px';
+            confetti.style.height = '8px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.borderRadius = '50%';
+            confetti.style.pointerEvents = 'none';
+            confetti.style.zIndex = '1000';
+            confetti.style.animation = 'confetti-fall 3s linear forwards'; 
+            
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }, i * 30);
+    }
+}
 
-initializeCoffeeBuilder()
-      calls => showOptions(step)
+initializeCoffeeBuilder();
 
-showOptions(step)    
-      updates stepTitle
-      updates optionsGrid 
-
-updateCoffeeDisplay()
-      updates ingredientList
-      update coffeeVisual
-      displays coffeeName
-      * real time display *
-
-
-showSuggestions() 
-      shows suggestions.
-      update suggestions div
-      lists suggestions. click function to suggestions.
-      
-
-selectOption(option)
-      add the option.id (what ve added) to currentIngredients
-
-removeIngredient(index)
-
-applySuggestion(ingredientId)
-
-finalizeCoffee()
-
-findOptionById(id)
-
-resetCoffee()
-
-finishCoffee()
-
-createCelebration()
- */
-
-
-/**
- * Interactive Coffee Builder - Clean Version
- * HTML Elements:
- * - floatingBeans (container)
- * - stepTitle (displays current step)
-      * - coffeeVisual (emoji display)
-      * - ingredientsList (selected ingredients)
-      * - coffeeName (recognized coffee name)
-      * - suggestions (recommendations)
-      * - priceDisplay (total price)
- * - optionsGrid (available choices)
-      * - resetBtn (restart button)
-      * - finishBtn (complete order button)
- */
+function finishCoffee() {
+    const coffeeName = document.getElementById('coffeeName').textContent;
+    alert(`🎉Order received!!\nOrdered: ${coffeeName}\nPreparing...`);
+    createCelebration();
+    
+    setTimeout(() => {
+        resetCoffee();
+    }, 3000);
+}
