@@ -1,25 +1,197 @@
 <!DOCTYPE html>
-<html>
-      <head>
-            <meta charset = "UTF-8">
-            <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
-            <title> Coffee Menu </title>
-            <link rel="stylesheet" href="styles.css">
-      </head>
+<html lang="tr">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+      <title>Coffee Menu</title>
+      <link rel="stylesheet" href="styles.css">
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
 
-      <body>
-            
-            <div class ="floating-beans" id = "floatingBeans">
+      <div class="floating-beans" id="floatingBeans"></div>
 
+      <!-- WELCOME -->
+      <div class="screen active" id="screenWelcome">
+            <div class="cup-icon">☕</div>
+            <h1>Kahveni Keşfet</h1>
+            <p class="subtitle">Çekirdekten fincana, senin kahven senin kuralların.</p>
+            <button class="btn-start" onclick="goTo('screenGrind')">Başlayalım</button>
+      </div>
+
+      <!-- GRIND LEVEL -->
+      <div class="screen" id="screenGrind">
+            <h2>Kahven nasıl çekilsin?</h2>
+            <p class="hint">Öğütme derecesini seç, gerisini biz halledelim.</p>
+            <div class="grind-options">
+                  <div class="grind-card" onclick="selectGrind('turk')">
+                        <div class="grind-visual">
+                              <div class="grind-dots very-fine"></div>
+                        </div>
+                        <span class="grind-label">Çok İnce</span>
+                        <span class="grind-result">Türk Kahvesi</span>
+                  </div>
+                  <div class="grind-card" onclick="selectGrind('espresso')">
+                        <div class="grind-visual">
+                              <div class="grind-dots fine"></div>
+                        </div>
+                        <span class="grind-label">İnce</span>
+                        <span class="grind-result">Espresso</span>
+                  </div>
+                  <div class="grind-card" onclick="selectGrind('filtre')">
+                        <div class="grind-visual">
+                              <div class="grind-dots medium"></div>
+                        </div>
+                        <span class="grind-label">Orta</span>
+                        <span class="grind-result">Filtre Kahve</span>
+                  </div>
+            </div>
+      </div>
+
+      <!-- TÜRK KAHVESİ -->
+      <div class="screen" id="screenTurk">
+            <button class="btn-back" onclick="goTo('screenGrind')">← Geri</button>
+            <h2>Türk Kahvesi</h2>
+            <div class="cup-preview turk-cup" id="turkCup">
+                  <div class="cup-body">
+                        <div class="coffee-liquid turk-liquid"></div>
+                        <div class="foam turk-foam"></div>
+                  </div>
+                  <div class="cup-handle"></div>
+                  <div class="saucer"></div>
+            </div>
+            <p class="hint">Şekerini ayarla</p>
+            <div class="sugar-options">
+                  <button class="sugar-btn active" onclick="selectSugar(this, 'Sade')">Sade</button>
+                  <button class="sugar-btn" onclick="selectSugar(this, 'Az')">Az Şekerli</button>
+                  <button class="sugar-btn" onclick="selectSugar(this, 'Orta')">Orta</button>
+                  <button class="sugar-btn" onclick="selectSugar(this, 'Çok')">Çok Şekerli</button>
+            </div>
+            <div class="extras-section">
+                  <p class="hint">Yanında ne olsun?</p>
+                  <div class="extras-row">
+                        <button class="extra-chip" onclick="toggleExtra(this)">💧 Su</button>
+                        <button class="extra-chip" onclick="toggleExtra(this)">🍫 Lokum</button>
+                        <button class="extra-chip" onclick="toggleExtra(this)">🍬 Çikolata</button>
+                  </div>
+            </div>
+            <button class="btn-brew" onclick="startBrew('turk')">Pişir!</button>
+      </div>
+
+      <!-- FİLTRE KAHVE -->
+      <div class="screen" id="screenFiltre">
+            <button class="btn-back" onclick="goTo('screenGrind')">← Geri</button>
+            <h2>Filtre Kahve</h2>
+            <div class="cup-preview filter-cup" id="filterCup">
+                  <div class="cup-body large">
+                        <div class="coffee-liquid filter-liquid"></div>
+                  </div>
+                  <div class="cup-handle"></div>
             </div>
 
-            <script src="script.js"></script>
-      </body>
+            <p class="hint">Demleme yöntemi</p>
+            <div class="method-options">
+                  <button class="method-btn active" onclick="selectMethod(this, 'V60')">
+                        <span class="method-icon">⌓</span>V60
+                  </button>
+                  <button class="method-btn" onclick="selectMethod(this, 'Chemex')">
+                        <span class="method-icon">⧖</span>Chemex
+                  </button>
+                  <button class="method-btn" onclick="selectMethod(this, 'French Press')">
+                        <span class="method-icon">⊡</span>French Press
+                  </button>
+                  <button class="method-btn" onclick="selectMethod(this, 'Aeropress')">
+                        <span class="method-icon">⊘</span>Aeropress
+                  </button>
+            </div>
+
+            <p class="hint">Çekirdek profili</p>
+            <div class="bean-options">
+                  <button class="bean-btn active" onclick="selectBean(this, 'Etiyopya')">
+                        🇪🇹 Etiyopya<br><small>Çiçeksi & Meyvemsi</small>
+                  </button>
+                  <button class="bean-btn" onclick="selectBean(this, 'Kolombiya')">
+                        🇨🇴 Kolombiya<br><small>Karamel & Fındık</small>
+                  </button>
+                  <button class="bean-btn" onclick="selectBean(this, 'Brezilya')">
+                        🇧🇷 Brezilya<br><small>Çikolata & Fıstık</small>
+                  </button>
+                  <button class="bean-btn" onclick="selectBean(this, 'Kenya')">
+                        🇰🇪 Kenya<br><small>Narenciye & Böğürtlen</small>
+                  </button>
+            </div>
+            <button class="btn-brew" onclick="startBrew('filtre')">Demle!</button>
+      </div>
+
+      <!-- ESPRESSO -->
+      <div class="screen" id="screenEspresso">
+            <button class="btn-back" onclick="goTo('screenGrind')">← Geri</button>
+            <h2 id="espressoDrinkName">Espresso</h2>
+            <div class="cup-preview espresso-cup" id="espressoCup">
+                  <div class="cup-body">
+                        <div class="coffee-liquid espresso-liquid"></div>
+                        <div class="milk-layer" id="milkLayer"></div>
+                        <div class="syrup-drizzle" id="syrupDrizzle"></div>
+                  </div>
+                  <div class="cup-handle"></div>
+            </div>
+
+            <div class="milk-section">
+                  <p class="hint">Süt miktarını ayarla</p>
+                  <div class="slider-container">
+                        <input type="range" min="0" max="5" value="0" class="milk-slider" id="milkSlider" oninput="updateMilk(this.value)">
+                        <div class="slider-labels">
+                              <span>Yok</span>
+                              <span>Su</span>
+                              <span class="slider-label-small">Cortado</span>
+                              <span class="slider-label-small">Ristretto B.</span>
+                              <span class="slider-label-small">Flat White</span>
+                              <span>Latte</span>
+                        </div>
+                  </div>
+                  <p class="drink-description" id="drinkDesc">Saf ve yoğun bir shot.</p>
+            </div>
+
+            <div class="syrup-section">
+                  <p class="hint">Sos & Şurup</p>
+                  <div class="syrup-options">
+                        <button class="syrup-chip" onclick="toggleSyrup(this, 'karamel', '#c8873b')" data-color="#c8873b">
+                              🍯 Karamel
+                        </button>
+                        <button class="syrup-chip" onclick="toggleSyrup(this, 'vanilya', '#f5e6c8')" data-color="#f5e6c8">
+                              🌼 Vanilya
+                        </button>
+                        <button class="syrup-chip" onclick="toggleSyrup(this, 'cikolata', '#5c3317')" data-color="#5c3317">
+                              🍫 Çikolata
+                        </button>
+                        <button class="syrup-chip" onclick="toggleSyrup(this, 'findik', '#a67b5b')" data-color="#a67b5b">
+                              🌰 Fındık
+                        </button>
+                  </div>
+            </div>
+            <button class="btn-brew" onclick="startBrew('espresso')">Hazırla!</button>
+      </div>
+
+      <!-- BREWING ANIMATION -->
+      <div class="screen" id="screenBrew">
+            <div class="brew-animation" id="brewAnimation">
+                  <div class="brew-spinner"></div>
+                  <p class="brew-text" id="brewText">Demleniyor...</p>
+            </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="screen" id="screenResult">
+            <div class="result-content">
+                  <div class="result-emoji">☕</div>
+                  <h2>Kahven Hazır!</h2>
+                  <div class="result-card" id="resultCard">
+                        <!-- filled by JS -->
+                  </div>
+                  <button class="btn-start" onclick="resetAll()">Tekrar Başla</button>
+            </div>
+      </div>
+
+      <script src="script.js"></script>
+</body>
 </html>
-
-<!-- 
-
-class="floating-beans" to style in CSS
-id = "floatingBeans" to target in JavaScript 
-
--->
