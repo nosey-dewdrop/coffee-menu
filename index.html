@@ -56,9 +56,13 @@
                   <div class="cup-body">
                         <div class="coffee-liquid turk-liquid"></div>
                         <div class="foam turk-foam"></div>
+                        <div class="cup-shine"></div>
                   </div>
                   <div class="cup-handle"></div>
                   <div class="saucer"></div>
+                  <div class="cup-steam">
+                        <span></span><span></span><span></span>
+                  </div>
             </div>
             <p class="hint">Şekerini ayarla</p>
             <div class="sugar-options">
@@ -85,8 +89,13 @@
             <div class="cup-preview filter-cup" id="filterCup">
                   <div class="cup-body large">
                         <div class="coffee-liquid filter-liquid"></div>
+                        <div class="cup-shine"></div>
                   </div>
                   <div class="cup-handle"></div>
+                  <div class="saucer"></div>
+                  <div class="cup-steam">
+                        <span></span><span></span><span></span>
+                  </div>
             </div>
 
             <p class="hint">Demleme yöntemi</p>
@@ -130,27 +139,44 @@
             <div class="cup-preview espresso-cup" id="espressoCup">
                   <div class="cup-body">
                         <div class="coffee-liquid espresso-liquid"></div>
-                        <div class="milk-layer" id="milkLayer"></div>
                         <div class="syrup-drizzle" id="syrupDrizzle"></div>
+                        <div class="cup-shine"></div>
                   </div>
                   <div class="cup-handle"></div>
+                  <div class="saucer"></div>
+                  <div class="cup-steam">
+                        <span></span><span></span><span></span>
+                  </div>
             </div>
 
-            <div class="milk-section">
-                  <p class="hint">Süt miktarını ayarla</p>
+            <div class="base-section">
+                  <p class="hint">Ne ekleyelim?</p>
+                  <div class="base-options">
+                        <button class="base-btn active" onclick="selectBase(this, 'none')" data-base="none">Sade Espresso</button>
+                        <button class="base-btn" onclick="selectBase(this, 'water')" data-base="water">💧 Su Ekle</button>
+                        <button class="base-btn" onclick="selectBase(this, 'milk')" data-base="milk">🥛 Süt Ekle</button>
+                  </div>
+            </div>
+
+            <div class="milk-section hidden" id="milkSection">
+                  <p class="hint">Süt miktarını kaydır</p>
                   <div class="slider-container">
-                        <input type="range" min="0" max="5" value="0" class="milk-slider" id="milkSlider" oninput="updateMilk(this.value)">
+                        <input type="range" min="0" max="3" value="0" class="milk-slider" id="milkSlider" oninput="updateMilk(this.value)">
                         <div class="slider-labels">
-                              <span>Yok</span>
-                              <span>Su</span>
-                              <span class="slider-label-small">Cortado</span>
-                              <span class="slider-label-small">Ristretto B.</span>
-                              <span class="slider-label-small">Flat White</span>
+                              <span>Macchiato</span>
+                              <span>Cortado</span>
+                              <span>Flat White</span>
                               <span>Latte</span>
                         </div>
                   </div>
-                  <p class="drink-description" id="drinkDesc">Saf ve yoğun bir shot.</p>
+                  <div class="foam-toggle">
+                        <button class="foam-btn" id="foamBtn" onclick="toggleFoam()">
+                              ☁️ Süt Köpüğü Ekle
+                        </button>
+                        <p class="foam-hint" id="foamHint"></p>
+                  </div>
             </div>
+            <p class="drink-description" id="drinkDesc">Saf ve yoğun bir shot.</p>
 
             <div class="syrup-section">
                   <p class="hint">Sos & Şurup</p>
@@ -177,6 +203,9 @@
             <div class="brew-animation" id="brewAnimation">
                   <div class="brew-spinner"></div>
                   <p class="brew-text" id="brewText">Demleniyor...</p>
+                  <div class="brew-facts" id="brewFacts">
+                        <p class="brew-fact" id="brewFact"></p>
+                  </div>
             </div>
       </div>
 

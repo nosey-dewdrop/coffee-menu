@@ -246,45 +246,194 @@ h2 {
 /* CUP PREVIEW */
 .cup-preview {
       position: relative;
-      margin: 1rem 0;
+      margin: 1.5rem 0 1rem;
       display: flex;
       align-items: flex-end;
       justify-content: center;
+      filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
 }
 
 .cup-body {
       width: 90px;
-      height: 80px;
-      background: linear-gradient(180deg, #e8ddd0, #d4c5b0);
-      border-radius: 5px 5px 25px 25px;
+      height: 70px;
+      background: linear-gradient(170deg, #faf5ef 0%, #ece2d5 30%, #ddd0c0 70%, #cfc0ad 100%);
+      border-radius: 4px 4px 35% 35%;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 -5px 15px rgba(0,0,0,0.1);
+      box-shadow:
+            inset 0 2px 6px rgba(255,255,255,0.6),
+            inset 0 -6px 12px rgba(0,0,0,0.06),
+            0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* İç kenar rim */
+.cup-body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(180deg, #faf5ef, #e8ddd0);
+      border-radius: 4px 4px 0 0;
+      z-index: 5;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* Parlak yansıma */
+.cup-shine {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 12px;
+      height: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent);
+      border-radius: 50%;
+      z-index: 4;
+      pointer-events: none;
 }
 
 .cup-body.large {
       width: 100px;
-      height: 100px;
+      height: 90px;
+      border-radius: 3px 3px 32% 32%;
 }
 
 .cup-handle {
-      width: 20px;
-      height: 35px;
-      border: 4px solid #d4c5b0;
+      width: 22px;
+      height: 32px;
+      border: 5px solid transparent;
+      border-image: linear-gradient(180deg, #e8ddd0, #cfc0ad) 1;
       border-left: none;
-      border-radius: 0 15px 15px 0;
+      border-radius: 0 14px 14px 0;
+      position: absolute;
+      right: -22px;
+      top: 10px;
+}
+
+/* Handle - border-image doesn't work with border-radius, use background trick */
+.cup-handle {
+      border: none;
+      background: none;
+      width: 22px;
+      height: 32px;
       position: absolute;
       right: -20px;
-      top: 15px;
+      top: 10px;
+}
+
+.cup-handle::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 5px solid #ddd0c0;
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 2px 2px 4px rgba(0,0,0,0.08);
 }
 
 .saucer {
       position: absolute;
-      bottom: -8px;
-      width: 120px;
-      height: 12px;
-      background: linear-gradient(180deg, #d4c5b0, #c4b5a0);
+      bottom: -7px;
+      width: 130px;
+      height: 16px;
+      background: linear-gradient(180deg, #e8ddd0 0%, #d4c5b0 40%, #c4b5a0 100%);
       border-radius: 50%;
+      box-shadow:
+            0 4px 10px rgba(0,0,0,0.15),
+            inset 0 2px 3px rgba(255,255,255,0.3);
+}
+
+/* Buhar animasyonu */
+.cup-steam {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-60%);
+      display: flex;
+      gap: 6px;
+}
+
+.cup-steam span {
+      display: block;
+      width: 3px;
+      height: 18px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      animation: steam 2s ease-in-out infinite;
+}
+
+.cup-steam span:nth-child(2) {
+      animation-delay: 0.4s;
+      height: 22px;
+}
+
+.cup-steam span:nth-child(3) {
+      animation-delay: 0.8s;
+      height: 16px;
+}
+
+@keyframes steam {
+      0% { opacity: 0; transform: translateY(0) scaleX(1); }
+      50% { opacity: 1; transform: translateY(-8px) scaleX(1.5); }
+      100% { opacity: 0; transform: translateY(-18px) scaleX(0.5); }
+}
+
+/* Türk kahvesi — küçük, zarif fincan */
+.turk-cup .cup-body {
+      width: 56px;
+      height: 58px;
+      border-radius: 3px 3px 40% 40%;
+}
+.turk-cup .cup-handle {
+      right: -16px;
+      top: 10px;
+}
+.turk-cup .cup-handle::before {
+      width: 16px;
+      height: 24px;
+      border-width: 4px;
+      border-radius: 0 10px 10px 0;
+}
+.turk-cup .saucer {
+      width: 95px;
+      height: 13px;
+}
+.turk-cup .cup-steam {
+      top: -20px;
+}
+.turk-cup .cup-steam span {
+      width: 2px;
+      height: 14px;
+}
+
+/* Espresso — kısa, geniş */
+.espresso-cup .cup-body {
+      width: 80px;
+      height: 60px;
+      border-radius: 3px 3px 38% 38%;
+}
+.espresso-cup .saucer {
+      width: 120px;
+}
+
+/* Filtre — uzun mug */
+.filter-cup .cup-body.large {
+      width: 85px;
+      height: 100px;
+      border-radius: 3px 3px 25% 25%;
+}
+.filter-cup .cup-handle {
+      top: 18px;
+}
+.filter-cup .cup-handle::before {
+      height: 38px;
+}
+.filter-cup .saucer {
+      width: 120px;
 }
 
 .coffee-liquid {
@@ -320,17 +469,6 @@ h2 {
       height: 35%;
       background: linear-gradient(180deg, #2a1506, #1a0e06);
       transition: height 0.6s ease;
-}
-
-.milk-layer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 0%;
-      background: linear-gradient(180deg, rgba(255,252,245,0.9), rgba(245,235,220,0.95));
-      transition: height 0.6s ease;
-      z-index: 1;
 }
 
 .syrup-drizzle {
@@ -476,11 +614,83 @@ h2 {
       color: #c8a882;
 }
 
-/* ESPRESSO - MILK SLIDER */
+/* ESPRESSO - BASE SELECTION */
+.base-section {
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 0.75rem;
+}
+
+.base-options {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+}
+
+.base-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 165, 116, 0.2);
+      color: #d4a574;
+      padding: 0.6rem 0.9rem;
+      border-radius: 25px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: "Inter", sans-serif;
+}
+
+.base-btn.active {
+      background: rgba(200, 135, 59, 0.2);
+      border-color: #c8873b;
+      color: #fff;
+}
+
+/* MILK SLIDER */
 .milk-section {
       width: 100%;
       max-width: 320px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.4s ease;
+      max-height: 200px;
+      overflow: hidden;
+}
+
+.milk-section.hidden {
+      max-height: 0;
+      margin: 0;
+      opacity: 0;
+      pointer-events: none;
+}
+
+.foam-toggle {
+      text-align: center;
+      margin-top: 0.75rem;
+}
+
+.foam-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 165, 116, 0.2);
+      color: #d4a574;
+      padding: 0.55rem 1.2rem;
+      border-radius: 25px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: "Inter", sans-serif;
+}
+
+.foam-btn.active {
+      background: rgba(200, 135, 59, 0.2);
+      border-color: #c8873b;
+      color: #fff;
+}
+
+.foam-hint {
+      color: #a08775;
+      font-size: 0.7rem;
+      margin-top: 0.4rem;
+      font-style: italic;
+      min-height: 1em;
 }
 
 .slider-container {
@@ -599,6 +809,38 @@ h2 {
       50% { opacity: 1; }
 }
 
+.brew-facts {
+      margin-top: 2rem;
+      max-width: 300px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+}
+
+.brew-fact {
+      color: #a08775;
+      font-size: 0.85rem;
+      text-align: center;
+      line-height: 1.5;
+      font-style: italic;
+      padding: 1rem 1.2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(212, 165, 116, 0.1);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+}
+
+.brew-fact.fact-enter {
+      opacity: 1;
+      transform: translateY(0);
+}
+
+.brew-fact.fact-exit {
+      opacity: 0;
+      transform: translateY(-10px);
+}
+
 /* RESULT */
 .result-content {
       text-align: center;
@@ -654,6 +896,31 @@ h2 {
       font-weight: 500;
 }
 
+.result-tips {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(212, 165, 116, 0.15);
+}
+
+.result-tips h4 {
+      font-family: "Playfair Display", serif;
+      color: #c8873b;
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+}
+
+.tip-item {
+      color: #a08775;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(212, 165, 116, 0.06);
+}
+
+.tip-item:last-child {
+      border-bottom: none;
+}
+
 /* RESPONSIVE */
 @media (max-width: 360px) {
       .grind-card {
@@ -683,7 +950,8 @@ h2 {
 /* Scrollable screens */
 #screenTurk,
 #screenFiltre,
-#screenEspresso {
+#screenEspresso,
+#screenResult {
       justify-content: flex-start;
       padding-top: 4rem;
 }
